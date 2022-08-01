@@ -107,21 +107,53 @@ function getTopRated() {
 
 // ** Fetches URL provided and returns response.json()
 async function getMovieTrailer(id) {
-  //URL: `https://api.themoviedb.org/3/movie/${id}/videos?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US`
+  //URL:
+  const videosUrl = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=19f84e11932abbc79e6d83f82d6d1045&language=en-US`;
+  let data = {};
+  try {
+    data = await (await fetch(videosUrl)).json();
+    // console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+  return data;
 }
+
+//getMovieTrailer(157336);
+
+// const trailers = async () => {
+//   return await getMovieTrailer(157336).then((result) => {
+//     return result.results;
+//   });
+// };
+
+// getMovieTrailer(157336).then((result) => {
+//   result.results.length > 0 ? console.log("Heyyyyy") : console.log("Nooooo");
+// });
 
 // ** Function that adds movie data to the DOM
 const setTrailer = (trailers) => {
   // Set up iframe variable to hold id of the movieTrailer Element
-  //-- const iframe
+  const iframeMovie = document.querySelector("#movieTrailer");
+
   // Set up variable to select .movieNotFound element
-  // -- const movieNotFound
+  const movieNotFound = document.querySelector(".movieNotFound");
 
   // If there is a trailer add the src for it
   if (trailers.length > 0) {
     // add d-none class to movieNotFound and remove it from iframe
+    movieNotFound.className = "d-none";
+    movieNotFound.remove();
     // add youtube link with trailers key to iframe.src
+    iframeMovie.src = `https://www.youtube.com/embed/${trailers[0].key}`;
+    console.log(iframeMovie.src);
   } else {
     // Else remove d-none class to movieNotfound and ADD it to iframe
+    console.log("ERROR!");
+    //  console.log(`https://www.youtube.com/watch?v=${trailers[0].key}`);
   }
 };
+
+getMovieTrailer(157336).then((result) => {
+  setTrailer(result.results);
+});
