@@ -156,4 +156,5 @@ const setTrailer = (trailers) => {
 
 getMovieTrailer(157336).then((result) => {
   setTrailer(result.results);
+  //commit for old laptop
 });
